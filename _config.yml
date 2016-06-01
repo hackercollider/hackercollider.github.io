@@ -17,3 +17,7 @@ github_username:  hackercollider
 
 # Build settings
 markdown: kramdown
+
+owner:
+  google:
+    analytics: UA-78620599-1
