@@ -1,12 +1,15 @@
 ---
-layout: post
-title:  "Hello HackerCollider!"
-date:   2016-06-01 21:46:00 +0700
-categories: nerd
+layout:     post
+title:      "Hello HackerCollider"
+subtitle:   "a blog for real nerds"
+date:       2016-06-01 23:00:00 GMT+7
+author:     "HackerCollider"
+header-img: "img/post-bg-01.jpg"
 ---
+
 {% highlight python %}
 def hello(name):
-  print(name)  
+  print(name)
 hello('HackerCollider!')
 #=> prints 'HackerCollider!' to STDOUT.
 {% endhighlight %}
