@@ -1,6 +1,7 @@
 ---
 layout:     post
 title:      "Recall vs Precision"
+subtitle:   "an alternative way to understand and remember recall and precision"
 date:       2016-06-03 19:11:00 +0700
 categories: articles
 tags:       [machine learning, recall, precision]
