@@ -3,8 +3,10 @@ layout:     post
 title:      "Recall vs Precision"
 date:       2016-06-03 19:11:00 +0700
 categories: articles
+tags:       [machine learning, recall, precision]
 author:     "Supasate Choochaisri"
 header-img: "img/post-bg-01.jpg"
+comments:   true
 ---
 
 In machine learning, `recall` and `precision` are heavily used for measuring algorithm performance.
