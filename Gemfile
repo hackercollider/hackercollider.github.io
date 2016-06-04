@@ -1,10 +1,7 @@
 source 'https://rubygems.org'
 
-group :jekyll_plugins do
-  gem "jekyll"
-  gem "jekyll-paginate"
-  gem "jekyll-feed"
-  gem "jekyll-sitemap"
-  gem "jekyll-seo-tag"
-  gem "jekyll-time-to-read"
-end
+require 'json'
+require 'open-uri'
+versions = JSON.parse(open('https://pages.github.com/versions.json').read)
+
+gem 'github-pages', versions['github-pages'], group: :jekyll_plugins
