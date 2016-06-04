@@ -13,6 +13,14 @@ layout: default
                     <h2 class="subheading">{{ page.subtitle }}</h2>
                     {% endif %}
                     <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+                    <span class="time-to-read">
+                        {% assign time_to_read = page.content | number_of_words | divided_by: 180 %}
+                        {% if time_to_read <= 1 %}
+                            less than 1 minute read
+                        {% else %}
+                            {{time_to_read}} minutes read
+                        {% endif %}
+                    </span>
                 </div>
             </div>
         </div>
@@ -25,7 +33,7 @@ layout: default
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				{{ content }}
+				        {{ content }}
 
                 <hr>
 
