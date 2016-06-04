@@ -14,7 +14,7 @@ layout: default
                     {% endif %}
                     <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
                     <span class="time-to-read">
-                        {% assign time_to_read = page.content | number_of_words | divided_by: 180 %}
+                        {% assign time_to_read = page.content | number_of_words | divided_by: 220 %}
                         {% if time_to_read <= 1 %}
                             less than 1 minute read
                         {% else %}
