@@ -11,32 +11,48 @@ var rename = require('gulp-rename');
 gulp.task('less', function () {
     return gulp.src('./less/hacker-collider.less')
         .pipe(less())
-        .pipe(gulp.dest('./css'));
+        .pipe(gulp.dest('./dist/css'));
 });
 
 // Sorting the CSS
 gulp.task('styles', ['less'], function () {
-    return gulp.src('./css/hacker-collider.css')
+    return gulp.src('./dist/css/hacker-collider.css')
         .pipe(csscomb())
-        .pipe(gulp.dest('./css/combed'));
+        .pipe(gulp.dest('./dist/css'));
 });
 
 // Removing unused classes in CSS
-gulp.task('uncss', ['styles'], function () {
-    return gulp.src('./css/combed/hacker-collider.css')
+gulp.task('uncss-main', ['styles'], function () {
+    return gulp.src('./dist/css/hacker-collider.css')
         .pipe(uncss({
             html: ['./_site/**/*.html'],
-            ignore: [/fp/],
-            timeout: 1000
+            ignore: [/fp/]
         }))
-        .pipe(gulp.dest('./css/uncss/'));
+        .pipe(gulp.dest('./dist/css'));
+});
+
+gulp.task('uncss-bootstrap', ['styles'], function () {
+    return gulp.src('./css/bootstrap.css')
+        .pipe(uncss({
+            html: ['./_site/**/*.html'],
+            ignore: [/fp/]
+        }))
+        .pipe(gulp.dest('./dist/css'));
+});
+
+gulp.task('copy-rest-css', ['styles'], function () {
+    return gulp.src('./css/syntax.css')
+        .pipe(gulp.dest('./dist/css'));
 });
 
 // Removeing tabs and spaces in CSS
-gulp.task('minify-css', ['uncss'], function () {
-    return gulp.src('./css/uncss/hacker-collider.css')
+gulp.task('minify-css', ['uncss-main', 'uncss-bootstrap', 'copy-rest-css'], function () {
+    return gulp.src('./dist/css/**/*.css')
         .pipe(cleanCSS({ compatibility: 'ie8' }))
-        .pipe(gulp.dest('./css'));
+        .pipe(rename({
+          suffix: '.min'
+        }))
+        .pipe(gulp.dest('./dist/css'));
 });
 
 // Estracting the critical path CSS
@@ -44,7 +60,7 @@ gulp.task('critical', ['minify-css'], function () {
     return critical.generate({
         base: '_site/',
         src: 'index.html', // Extract critical path CSS for index.html
-        css: ['./css/hacker-collider.css'],
+        css: ['./dist/css/bootstrap.css', './dist/css/hacker-collider.css', './dist/css/syntax.css'],
         dest: './_includes/critical.css',
         minify: true,
         include: [/cc_/],
@@ -54,13 +70,15 @@ gulp.task('critical', ['minify-css'], function () {
 
 // Uglify JS
 gulp.task('uglify', function () {
-    return gulp.src('./js/hacker-collider.js')
+    return gulp.src('./js/**/*.js')
         .pipe(uglify())
-        .pipe(rename('hacker-collider.min.js'))
-        .pipe(gulp.dest('./js'));
+        .pipe(rename({
+          suffix: '.min'
+        }))
+        .pipe(gulp.dest('./dist/js'));
 });
 
 // Run all the tasks above in the following fixed sequence
-gulp.task('css', ['less', 'styles', 'uncss', 'minify-css', 'critical']);
+gulp.task('css', ['less', 'styles', 'uncss-main', 'uncss-bootstrap', 'copy-rest-css', 'minify-css', 'critical']);
 gulp.task('js', ['uglify']);
 gulp.task('default', ['css', 'js']);
