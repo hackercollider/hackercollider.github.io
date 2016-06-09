@@ -3,6 +3,14 @@
     <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+                script-src 'self' 'nonce-DFj918eJFKDj12qqQfi' https://www.google-analytics.com https://oss.maxcdn.com http://hackercollider.disqus.com;
+                style-src 'self' 'nonce-afDFj82fKjffkaKasQ21fD' 'nonce-f93fjFefj1093ughHUy' http://fonts.googleapis.com http://maxcdn.bootstrapcdn.com;
+                font-src 'self' http://fonts.gstatic.com http://maxcdn.bootstrapcdn.com;
+                img-src 'self' https://www.google-analytics.com;
+                child-src 'none';
+                object-src 'none';">
     <meta name="robots" CONTENT="index,follow">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
     <meta name="description" content="{{ site.description }}">
@@ -10,7 +18,7 @@
     <link rel="alternate" hreflang="en" href="{{ site.url }}" />
 
     <!-- Critical CSS -->
-    <style>{% include critical.css %}</style>
+    <style nonce=afDFj82fKjffkaKasQ21fD>{% include critical.css %}</style>
 
     {% feed_meta %}
 
