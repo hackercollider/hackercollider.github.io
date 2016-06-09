@@ -11,8 +11,10 @@
                 img-src 'self' https://www.google-analytics.com;
                 child-src 'none';
                 object-src 'none';">
-    <!-- X-Frame-Options here is used as a reminder, it must be set on http header to make it work -->
+    <!-- X-Frame-Options, X-XSS, X-Permitted-Cross-Domain here are used as a reminder, they must be set on http header to make them work -->
     <meta http-equiv="X-Frame-Options" content="sameorigin">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="X-Permitted-Cross-Domain-Policies" content="master-only">
     <meta name="robots" CONTENT="index,follow">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
     <meta name="description" content="{{ site.description }}">
