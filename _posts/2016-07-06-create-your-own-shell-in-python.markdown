@@ -95,3 +95,25 @@ def shell_loop():
 {% endhighlight %}
 
 That's all of our shell loop.
+
+**Step 2: Tokenization**
+
+When a user types a command on our shell and hits enter. The command input will be a long string containing both a command name and its arguments. Therefore, we have to tokenize it (split a string into several tokens) first.
+
+It seems simple at first glance. We might use `cmd.split()` to separate the input by spaces. It works well for a command like `ls -a my_folder` because it splits the command into a list `['ls', '-a', 'my_folder']` which we can use them easily.
+
+However, there are some cases that some arguments are quoted with single or double quotes like `echo "Hello World"` or `echo 'Hello World'`. If we use `cmd.split()`, we will get a list of 3 tokens `['echo', '"Hello', 'World"']` instead of 2 tokens `['echo', 'Hello World']`.
+
+Fortunately, Python provides a library called `shlex` that helps us split like a charm. (Note: we can also use regular expression but it's not the main point of this article.)
+
+{% highlight python %}
+import sys
+import shlex
+
+...
+
+def tokenize(string):
+    return shlex.split(string)
+
+...
+{% endhighlight %}
