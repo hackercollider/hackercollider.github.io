@@ -94,7 +94,7 @@ def shell_loop():
         status = execute(cmd_tokens)
 {% endhighlight %}
 
-That's all of our shell loop.
+That's all of our shell loop. If we start our shell with `python shell.py`, it will show the command prompt. However, it will throw an error if we type a command and hit enter because we don't define `tokenize` function yet.
 
 **Step 2: Tokenization**
 
@@ -114,6 +114,76 @@ import shlex
 
 def tokenize(string):
     return shlex.split(string)
+
+...
+{% endhighlight %}
+
+**Step 3: Execute**
+
+This is the core and fun part of a shell. What happen when a shell executes `mkdir test_dir`? (Note: `mkdir` is a program to be executed with arguments `test_dir` for creating a directory named `test_dir`.)
+
+The first function involved in this step is `execvp`. Before I explain what `execvp` does, let's see it in action.
+
+{% highlight python %}
+import os
+...
+
+def execute(cmd_tokens):
+    # Execute command
+    os.execvp(cmd_tokens[0], cmd_tokens)
+
+    # Return status indicating to wait for next command in shell_loop
+    return SHELL_STATUS_RUN
+
+...
+{% endhighlight %}
+
+Try running our shell again and input a command `mkdir test_dir`, then, hit enter.
+
+The problem is after we hit enter, our shell exits instead of waiting for the next command.
+
+So, what `execvp` really does?
+
+`execvp` is a variant of a system call `exec`. The first argument is the program name. The `v` indicates the second argument is a list of program arguments (variable number of arguments). The `p` indicates the `PATH` environment will be used for searching for the given program name. (There are other variants of `exec` such as execv, execvpe, execl, execlp, execlpe; you can google them.)
+
+`exec` replaces the current memory of a calling process with a new process to be executed. In our case, our shell process memory was replaced by `mkdir` program. Then, `mkdir` became the main process and created the `test_dir` directory. Finally, its process exited.
+
+The main point here is that **our shell process was replaced by `mkdir` process** already. That's the reason why our shell disappeared and did not wait for the next command.
+
+Therefore, we need another system call `fork` to rescue.
+
+`fork` will allocate new memory and copy the current process into a new process. We called this new process as **child process** and the caller process as **parent process**. Then, the child process memory will be replaced by a `exec`ed program. Therefore, our shell, which is a parent process, is safe from memory replacement.
+
+Let's see our modified code.
+
+{% highlight python %}
+...
+
+def execute(cmd_tokens):
+    # Fork a child shell process
+    # If the current process is a child process,
+    #     pid = 0
+    # If the current process is a parent process,
+    #     pid = process id of its child process
+    pid = os.fork()
+
+    if pid == 0:
+    # Child process
+        # Replace the child shell process with the program called with exec
+        os.execvp(cmd_tokens[0], cmd_tokens)
+    elif pid > 0:
+    # Parent process
+        while True:
+            # Wait response status from its child process (identified with pid)
+            wpid, status = os.waitpid(pid, 0)
+
+            # Finish waiting if its child process exits normally
+            # or is terminated by a signal
+            if os.WIFEXITED(status) or os.WIFSIGNALED(status):
+                break
+
+    # Return status indicating to wait for next command in shell_loop
+    return SHELL_STATUS_RUN
 
 ...
 {% endhighlight %}
