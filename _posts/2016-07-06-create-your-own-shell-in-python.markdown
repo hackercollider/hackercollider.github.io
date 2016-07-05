@@ -187,3 +187,9 @@ def execute(cmd_tokens):
 
 ...
 {% endhighlight %}
+
+Now, try running our shell and input `mkdir test_dir2`. It should work properly. Our main shell process is still there and waits for the next command. Try `ls` and you will see the created directories.
+
+However, there are some problems here. First, try `cd test_dir2` and then `ls`. It's supposed to enter the directory `test_dir2` which is empty directory. However, you will see that the directory was not changed into `test_dir2`. Second, we still have no way to exit from our shell gracefully (I forgot to tell you how to exit from our shell but I think you already figured it out by using ctrl-c or ctrl-z or closing the terminal which are the hard ways to kill a process).
+
+We will continue to solve such problems in Part 2. (Coming soon) 
