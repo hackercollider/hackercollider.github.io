@@ -14,6 +14,7 @@ I'm curious to know how a shell (like bash, csh, etc.) works internally. So, I i
 Let's start.
 
 **Step 0: Project Structure**
+===
 
 For this project, I use the following project structure.
 
@@ -31,6 +32,7 @@ yosh_project
 `shell.py` is our main shell file.
 
 **Step 1: Shell Loop**
+===
 
 When you start a shell, it will show a command prompt and wait for your command input. After it receives the command and executes it (the detail will be explained later), your shell will be back to the wait loop for your next command.
 
@@ -99,6 +101,7 @@ That's all of our shell loop. If we start our shell with `python shell.py`, it w
 To exit the shell, try ctrl-c. We will tell how to exit gracefully later.
 
 **Step 2: Tokenization**
+===
 
 When a user types a command in our shell and hits enter. The command input will be a long string containing both a command name and its arguments. Therefore, we have to tokenize it (split a string into several tokens).
 
@@ -124,6 +127,7 @@ Then, we will send these tokens to the execution process.
 
 
 **Step 3: Execution**
+===
 
 This is the core and fun part of a shell. What happen when a shell executes `mkdir test_dir`? (Note: `mkdir` is a program to be executed with arguments `test_dir` for creating a directory named `test_dir`.)
 
