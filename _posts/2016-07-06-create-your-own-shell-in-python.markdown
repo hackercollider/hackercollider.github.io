@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "Create Your Own Shell in Python : Part I"
-date:       2016-07-06 05:05:00 +0700
+date:       2016-07-06 05:28:00 +0700
 categories: articles
 tags:       [shell, python, unix]
 author:     "Supasate Choochaisri"
