@@ -15,7 +15,7 @@ Let's start.
 
 **Step 0: Project Structure**
 
-For this project, I create the following project structure.
+For this project, I use the following project structure.
 
 {% highlight bash %}
 yosh_project
@@ -26,7 +26,7 @@ yosh_project
 
 `yosh_project` is the root project folder (you can also name it just `yosh`).
 
-`yosh` is the package folder and `__init__.py` will make it a package named the same as the package folder name.
+`yosh` is the package folder and `__init__.py` will make it a package named the same as the package folder name. (If you don't write Python, just ignore it.)
 
 `shell.py` is our main shell file.
 
@@ -96,9 +96,11 @@ def shell_loop():
 
 That's all of our shell loop. If we start our shell with `python shell.py`, it will show the command prompt. However, it will throw an error if we type a command and hit enter because we don't define `tokenize` function yet.
 
+To exit the shell, try ctrl-c. We will tell how to exit gracefully later.
+
 **Step 2: Tokenization**
 
-When a user types a command on our shell and hits enter. The command input will be a long string containing both a command name and its arguments. Therefore, we have to tokenize it (split a string into several tokens) first.
+When a user types a command in our shell and hits enter. The command input will be a long string containing both a command name and its arguments. Therefore, we have to tokenize it (split a string into several tokens).
 
 It seems simple at first glance. We might use `cmd.split()` to separate the input by spaces. It works well for a command like `ls -a my_folder` because it splits the command into a list `['ls', '-a', 'my_folder']` which we can use them easily.
 
@@ -118,7 +120,10 @@ def tokenize(string):
 ...
 {% endhighlight %}
 
-**Step 3: Execute**
+Then, we will send these tokens to the execution process.
+
+
+**Step 3: Execution**
 
 This is the core and fun part of a shell. What happen when a shell executes `mkdir test_dir`? (Note: `mkdir` is a program to be executed with arguments `test_dir` for creating a directory named `test_dir`.)
 
@@ -140,17 +145,19 @@ def execute(cmd_tokens):
 
 Try running our shell again and input a command `mkdir test_dir`, then, hit enter.
 
-The problem is after we hit enter, our shell exits instead of waiting for the next command.
+The problem is after we hit enter, our shell exits instead of waiting for the next command. However, the directory is correctly created.
 
 So, what `execvp` really does?
 
-`execvp` is a variant of a system call `exec`. The first argument is the program name. The `v` indicates the second argument is a list of program arguments (variable number of arguments). The `p` indicates the `PATH` environment will be used for searching for the given program name. (There are other variants of `exec` such as execv, execvpe, execl, execlp, execlpe; you can google them.)
+`execvp` is a variant of a system call `exec`. The first argument is the program name. The `v` indicates the second argument is a list of program arguments (variable number of arguments). The `p` indicates the `PATH` environment will be used for searching for the given program name. In our previous attempt, the `mkdir` program was found based on your `PATH` environment variable.
+
+(There are other variants of `exec` such as execv, execvpe, execl, execlp, execlpe; you can google them for more information.)
 
 `exec` replaces the current memory of a calling process with a new process to be executed. In our case, our shell process memory was replaced by `mkdir` program. Then, `mkdir` became the main process and created the `test_dir` directory. Finally, its process exited.
 
 The main point here is that **our shell process was replaced by `mkdir` process** already. That's the reason why our shell disappeared and did not wait for the next command.
 
-Therefore, we need another system call `fork` to rescue.
+Therefore, we need another system call to rescue: `fork`.
 
 `fork` will allocate new memory and copy the current process into a new process. We called this new process as **child process** and the caller process as **parent process**. Then, the child process memory will be replaced by a `exec`ed program. Therefore, our shell, which is a parent process, is safe from memory replacement.
 
@@ -190,6 +197,8 @@ def execute(cmd_tokens):
 
 Now, try running our shell and input `mkdir test_dir2`. It should work properly. Our main shell process is still there and waits for the next command. Try `ls` and you will see the created directories.
 
-However, there are some problems here. First, try `cd test_dir2` and then `ls`. It's supposed to enter the directory `test_dir2` which is empty directory. However, you will see that the directory was not changed into `test_dir2`. Second, we still have no way to exit from our shell gracefully (I forgot to tell you how to exit from our shell but I think you already figured it out by using ctrl-c or ctrl-z or closing the terminal which are the hard ways to kill a process).
+However, there are some problems here. First, try `cd test_dir2` and then `ls`.
 
-We will continue to solve such problems in Part 2. (Coming soon)
+It's supposed to enter the directory `test_dir2` which is an empty directory. However, you will see that the directory was not changed into `test_dir2`. Second, we still have no way to exit from our shell gracefully.
+
+We will continue to solve such problems in Part II. (Coming soon)
