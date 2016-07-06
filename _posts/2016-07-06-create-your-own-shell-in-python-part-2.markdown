@@ -136,3 +136,55 @@ Therefore, in `yosh/shell.py`, when we import `*` from `yosh.builtins`, we get `
 We've done preparing our code. Let's try by running our shell as a module `python -m yosh.shell` at the same level as the `yosh` directory.
 
 Now, our `cd` command should change our shell directory correctly while non-built-in commands still work too. Cool.
+
+**exit**
+===
+
+Here comes the last piece: to exit gracefully.
+
+We need a function that changes the shell status to be `SHELL_STATUS_STOP`. So, the shell loop will naturally break and the shell program will end and exit.
+
+As same as `cd`, if we fork and exec `exit` in a child process, the parent process will still remain inact. Therefore, the `exit` function is needed to be a shell built-in function.
+
+Let's start by creating a new file called `exit.py` in the `builtins` folder.
+
+{% highlight bash %}
+yosh_project
+|-- yosh
+   |-- builtins
+   |   |-- __init__.py
+   |   |-- cd.py
+   |   |-- exit.py
+   |-- __init__.py
+   |-- constants.py
+   |-- shell.py
+{% endhighlight %}
+
+The `exit.py` defines the `exit` function that just returns the status to break the main loop.
+
+{% highlight python %}
+from yosh.constants import *
+
+def exit(args):
+    return SHELL_STATUS_STOP
+ {% endhighlight %}
+
+Then, we import the `exit` function reference in `yosh/builtins/__init__.py`.
+
+{% highlight python %}
+from yosh.builtins.cd import *
+from yosh.builtins.exit import *
+{% endhighlight %}
+
+Finally, in `shell.py`, we register the `exit` command in `init()` function.
+
+{% highlight python %}
+# Register all built-in commands here
+def init():
+    register_command("cd", cd)
+    register_command("exit", exit)
+{% endhighlight %}
+
+That's all!
+
+Try running `python -m yosh.shell`. Now you can enter `exit` to quit the program gracefully.
