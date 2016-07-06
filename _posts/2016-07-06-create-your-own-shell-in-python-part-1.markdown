@@ -98,7 +98,7 @@ def shell_loop():
 
 That's all of our shell loop. If we start our shell with `python shell.py`, it will show the command prompt. However, it will throw an error if we type a command and hit enter because we don't define `tokenize` function yet.
 
-To exit the shell, try ctrl-c. We will tell how to exit gracefully later.
+To exit the shell, try ctrl-c. I will tell how to exit gracefully later.
 
 **Step 2: Tokenization**
 ===
@@ -129,7 +129,7 @@ Then, we will send these tokens to the execution process.
 **Step 3: Execution**
 ===
 
-This is the core and fun part of a shell. What happen when a shell executes `mkdir test_dir`? (Note: `mkdir` is a program to be executed with arguments `test_dir` for creating a directory named `test_dir`.)
+This is the core and fun part of a shell. What happened when a shell executes `mkdir test_dir`? (Note: `mkdir` is a program to be executed with arguments `test_dir` for creating a directory named `test_dir`.)
 
 The first function involved in this step is `execvp`. Before I explain what `execvp` does, let's see it in action.
 
@@ -149,7 +149,7 @@ def execute(cmd_tokens):
 
 Try running our shell again and input a command `mkdir test_dir`, then, hit enter.
 
-The problem is after we hit enter, our shell exits instead of waiting for the next command. However, the directory is correctly created.
+The problem is, after we hit enter, our shell exits instead of waiting for the next command. However, the directory is correctly created.
 
 So, what `execvp` really does?
 
