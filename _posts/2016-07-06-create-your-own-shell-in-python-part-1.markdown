@@ -219,4 +219,4 @@ First, try `cd test_dir2` and then `ls`. It's supposed to enter the directory `t
 
 Second, we still have no way to exit from our shell gracefully.
 
-We will continue to solve such problems in Part II. (Coming soon)
+We will continue to solve such problems in [Part 2](https://hackercollider.com/articles/2016/07/06/create-your-own-shell-in-python-part-2/).
