@@ -199,10 +199,24 @@ def execute(cmd_tokens):
 ...
 {% endhighlight %}
 
-Now, try running our shell and input `mkdir test_dir2`. It should work properly. Our main shell process is still there and waits for the next command. Try `ls` and you will see the created directories.
+When the parent process call `os.fork()`, you can imagine that all source code is copied into a new child process. At this point, the parent and child process see the same code and run in parallel.
 
-However, there are some problems here. First, try `cd test_dir2` and then `ls`.
+If the running code is belong to the child process, `pid` will be **0**.
+If the running code is belong to the parent process, `pid` will be the process id of the child process.
 
-It's supposed to enter the directory `test_dir2` which is an empty directory. However, you will see that the directory was not changed into `test_dir2`. Second, we still have no way to exit from our shell gracefully.
+When `os.execvp` is invoked in the child process, you can imagine like all the source code of the child process is replaced by the code of a program that is being called. However, the code of the parent process is not changed.
+
+When the parent process finishes waiting its child process to exit or be terminated, it returns the status indicating to continue the shell loop.
+
+**Run**
+===
+
+Now, you can try running our shell and enter `mkdir test_dir2`. It should work properly. Our main shell process is still there and waits for the next command. Try `ls` and you will see the created directories.
+
+However, there are some problems here.
+
+First, try `cd test_dir2` and then `ls`. It's supposed to enter the directory `test_dir2` which is an empty directory. However, you will see that the directory was not changed into `test_dir2`.
+
+Second, we still have no way to exit from our shell gracefully.
 
 We will continue to solve such problems in Part II. (Coming soon)
