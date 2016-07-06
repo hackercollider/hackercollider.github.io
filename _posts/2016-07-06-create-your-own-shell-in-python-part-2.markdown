@@ -21,3 +21,118 @@ Remember that we fork a child process, then, exec the command which does not hap
 Then, the child process exits, and the parent process continues with the same intact directory.
 
 Therefore, this kind of commands must be built-in with the shell itself. It must be executed in the shell process without forking.
+
+**cd**
+===
+
+Let's start with `cd` command.
+
+We first create a `builtins` directory. Each built-in command will be put inside this directory.
+
+{% highlight bash %}
+yosh_project
+|-- yosh
+   |-- builtins
+   |   |-- __init__.py
+   |   |-- cd.py
+   |-- __init__.py
+   |-- shell.py
+{% endhighlight %}
+
+In `cd.py`, we implement our own `cd` command by using a system call `os.chdir`.
+
+{% highlight python %}
+import os
+from yosh.constants import *
+
+def cd(args):
+    os.chdir(args[0])
+
+    return SHELL_STATUS_RUN
+{% endhighlight %}
+
+Notice that we return shell running status from a built-in function. Therefore, we move constants into `yosh/constants.py` to be used across the project.
+
+{% highlight bash %}
+yosh_project
+|-- yosh
+   |-- builtins
+   |   |-- __init__.py
+   |   |-- cd.py
+   |-- __init__.py
+   |-- constants.py
+   |-- shell.py
+{% endhighlight %}
+
+In `constants.py`, we put shell status constants here.
+
+{% highlight python %}
+SHELL_STATUS_STOP = 0
+SHELL_STATUS_RUN = 1
+{% endhighlight %}
+
+Now, our built-in `cd` is ready. Let's modify our `shell.py` to handle built-in functions.
+
+{% highlight python %}
+...
+# Import constants
+from yosh.constants import *
+
+# Hash map to store built-in function name and reference as key and value
+built_in_cmds = {}
+
+def tokenize(string):
+    return shlex.split(string)
+
+def execute(cmd_tokens):
+    # Extract command name and arguments from tokens
+    cmd_name = cmd_tokens[0]
+    cmd_args = cmd_tokens[1: ]
+
+    # If the command is a built-in command, invoke its function with arguments
+    if cmd_name in built_in_cmds:
+        return built_in_cmds[cmd_name](cmd_args)
+
+    ...
+{% endhighlight %}
+
+We use a Python dictionary `built_in_cmds` as a hash map to store our built-in functions. In `execute` function, we extract command name and arguments. If the command name is in our hash map, we call that built-in function.
+
+(Note: `built_in_cmds[cmd_name]` returns the function reference that can be invoked with arguments immediately.)
+
+We are almost ready to use the built-in `cd` function. The last thing is to add `cd` function into the `built_in_cmds` map.
+
+{% highlight python %}
+...
+# Import all built-in function references
+from yosh.builtins import *
+
+...
+
+# Register a built-in function to built-in command hash map
+def register_command(name, func):
+    built_in_cmds[name] = func
+
+# Register all built-in commands here
+def init():
+    register_command("cd", cd)
+
+def main():
+    # Init shell before starting the main loop
+    init()
+    shell_loop()
+{% endhighlight %}
+
+We define `register_command` function for adding a built-in function to our built-in commmand hash map. Then, we define `init` function and register the built-in `cd` function there.
+
+Notice the line `register_command("cd", cd)`. The first argument is a command name. The second argument is a reference to a function. In order to let `cd`, in the second argument, refer to the `cd` function reference in `yosh/builtins/cd.py`, we have to put the following line in `yosh/builtins/__init__.py`.
+
+{% highlight python %}
+from yosh.builtins.cd import *
+{% endhighlight %}
+
+Therefore, in `yosh/shell.py`, when we import `*` from `yosh.builtins`, we get `cd` function reference that is already imported by `yosh.builtins`.
+
+We've done preparing our code. Let's try by running our shell as a module `python -m yosh.shell` at the same level as the `yosh` directory.
+
+Now, our `cd` command should change our shell directory correctly while non-built-in commands still work too. Cool.
