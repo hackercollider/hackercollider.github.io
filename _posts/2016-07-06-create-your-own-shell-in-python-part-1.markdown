@@ -11,6 +11,8 @@ comments:   true
 
 I'm curious to know how a shell (like bash, csh, etc.) works internally. So, I implemented one called **yosh** (**Y**our **O**wn **SH**ell) in Python to answer my own curiosity. The concept I explain in this article can be applied to other languages as well.
 
+(Note: You can find source code used in this blog post [here](https://github.com/supasate/yosh). I distribute it with MIT license.)
+
 Let's start.
 
 **Step 0: Project Structure**
