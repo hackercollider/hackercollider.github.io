@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "Create Your Own Shell in Python : Part II"
-date:       2016-07-06 11:00:00 +0700
+date:       2016-07-07 00:01:00 +0700
 categories: articles
 tags:       [shell, python, unix]
 author:     "Supasate Choochaisri"
@@ -188,3 +188,12 @@ def init():
 That's all!
 
 Try running `python -m yosh.shell`. Now you can enter `exit` to quit the program gracefully.
+
+**Final Thought**
+===
+
+I hope you enjoy creating `yosh` (**y**our **o**wn **sh**ell) like I do. However, my version of `yosh` is still in an early stage. I don't handle several corner cases that can corrupt the shell. There are a lot of built-in commands that I don't cover. Some non-built-in commands can also be implemented as built-in commands to improve performance (avoid new process creation time).
+
+Now, it's your turn to make it real Your Own SHell.
+
+Happy Coding.
