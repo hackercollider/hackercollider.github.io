@@ -192,7 +192,7 @@ Try running `python -m yosh.shell`. Now you can enter `exit` to quit the program
 **Final Thought**
 ===
 
-I hope you enjoy creating `yosh` (**y**our **o**wn **sh**ell) like I do. However, my version of `yosh` is still in an early stage. I don't handle several corner cases that can corrupt the shell. There are a lot of built-in commands that I don't cover. Some non-built-in commands can also be implemented as built-in commands to improve performance (avoid new process creation time). And, a ton of features are not yet implemented (see [Common features](http://tldp.org/LDP/Bash-Beginners-Guide/html/x7243.html) and [Differing features](http://www.tldp.org/LDP/intro-linux/html/x12249.html).
+I hope you enjoy creating `yosh` (**y**our **o**wn **sh**ell) like I do. However, my version of `yosh` is still in an early stage. I don't handle several corner cases that can corrupt the shell. There are a lot of built-in commands that I don't cover. Some non-built-in commands can also be implemented as built-in commands to improve performance (avoid new process creation time). And, a ton of features are not yet implemented (see [Common features](http://tldp.org/LDP/Bash-Beginners-Guide/html/x7243.html) and [Differing features](http://www.tldp.org/LDP/intro-linux/html/x12249.html)).
 
 I've provided the source code at [github.com/supasate/yosh](https://github.com/supasate/yosh). Feel free to fork and play around.
 
