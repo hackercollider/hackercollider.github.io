@@ -45,8 +45,10 @@ In `shell.py`, we start by a simple main function calling the `shell_loop()` fun
 def shell_loop():
     # Start the loop here
 
+
 def main():
     shell_loop()
+
 
 if __name__ == "__main__":
     main()
@@ -59,6 +61,7 @@ import sys
 
 SHELL_STATUS_RUN = 1
 SHELL_STATUS_STOP = 0
+
 
 def shell_loop():
     status = SHELL_STATUS_RUN
@@ -82,9 +85,10 @@ import sys
 SHELL_STATUS_RUN = 1
 SHELL_STATUS_STOP = 0
 
+
 def shell_loop():
     status = SHELL_STATUS_RUN
-    
+
     while status == SHELL_STATUS_RUN:
         # Display a command prompt
         sys.stdout.write('> ')
@@ -176,10 +180,9 @@ Let's see our modified code.
 
 def execute(cmd_tokens):
     # Fork a child shell process
-    # If the current process is a child process,
-    #     pid = 0
-    # If the current process is a parent process,
-    #     pid = process id of its child process
+    # If the current process is a child process, its `pid` is set to `0`
+    # else the current process is a parent process and the value of `pid`
+    # is the process id of its child process.
     pid = os.fork()
 
     if pid == 0:
@@ -205,8 +208,8 @@ def execute(cmd_tokens):
 
 When the parent process call `os.fork()`, you can imagine that all source code is copied into a new child process. At this point, the parent and child process see the same code and run in parallel.
 
-If the running code is belong to the child process, `pid` will be **0**.
-If the running code is belong to the parent process, `pid` will be the process id of the child process.
+If the running code is belong to the child process, `pid` will be `0`.
+Else, the running code is belong to the parent process, `pid` will be the process id of the child process.
 
 When `os.execvp` is invoked in the child process, you can imagine like all the source code of the child process is replaced by the code of a program that is being called. However, the code of the parent process is not changed.
 

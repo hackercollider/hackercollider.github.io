@@ -45,6 +45,7 @@ In `cd.py`, we implement our own `cd` command by using a system call `os.chdir`.
 import os
 from yosh.constants import *
 
+
 def cd(args):
     os.chdir(args[0])
 
@@ -81,13 +82,15 @@ from yosh.constants import *
 # Hash map to store built-in function name and reference as key and value
 built_in_cmds = {}
 
+
 def tokenize(string):
     return shlex.split(string)
+
 
 def execute(cmd_tokens):
     # Extract command name and arguments from tokens
     cmd_name = cmd_tokens[0]
-    cmd_args = cmd_tokens[1: ]
+    cmd_args = cmd_tokens[1:]
 
     # If the command is a built-in command, invoke its function with arguments
     if cmd_name in built_in_cmds:
@@ -113,9 +116,11 @@ from yosh.builtins import *
 def register_command(name, func):
     built_in_cmds[name] = func
 
+
 # Register all built-in commands here
 def init():
     register_command("cd", cd)
+
 
 def main():
     # Init shell before starting the main loop
@@ -165,6 +170,7 @@ The `exit.py` defines the `exit` function that just returns the status to break 
 {% highlight python %}
 from yosh.constants import *
 
+
 def exit(args):
     return SHELL_STATUS_STOP
  {% endhighlight %}
@@ -179,10 +185,14 @@ from yosh.builtins.exit import *
 Finally, in `shell.py`, we register the `exit` command in `init()` function.
 
 {% highlight python %}
+...
+
 # Register all built-in commands here
 def init():
     register_command("cd", cd)
     register_command("exit", exit)
+
+...
 {% endhighlight %}
 
 That's all!
